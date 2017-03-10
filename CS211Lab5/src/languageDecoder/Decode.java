@@ -11,7 +11,7 @@ public class Decode {
 
     FileIO reader = new FileIO();
     inputs = reader.load("encoded.txt");
-
+    int totalChars = 0;
     Map<Character,Double> encoded = new HashMap<Character,Double>();
     for(String line : inputs) {
       for(char c : line.toCharArray()) {
@@ -20,6 +20,7 @@ public class Decode {
         } else {
           encoded.put(c, 1.0);
         }
+        totalChars++;
       }
     }
 
@@ -36,7 +37,11 @@ public class Decode {
 
 
     for(Char c : characters) {
-      System.out.println(c.key + " " + c.frequency);
+    double frequency=c.frequency/totalChars;
+    frequency=frequency*10000;
+    frequency=(int) frequency;
+    frequency=frequency/10000;
+      System.out.println(c.key + " " + (frequency));
     }
 
     decodeInput();
@@ -58,7 +63,7 @@ public class Decode {
       double score = 0.0;
       
       for(int i = 0; i < 26; i++) {
-        score += characters.get(i).frequency - ln.characters.get(i).frequency;
+        score += characters.get(i).frequency + ln.characters.get(i).frequency;
       }
 
       ln.matchScore = score;
@@ -71,8 +76,9 @@ public class Decode {
       System.out.println(l.name + " " + l.matchScore);
     }
 
-
-    ArrayList<Char> decodeChars = tests.get(0).characters;
+    ArrayList<Char> decodeChars = new ArrayList<Char>();
+    	decodeChars.addAll(tests.get(0).characters);
+    
 
 
     for(int i = 0; i < inputs.length; i++) {
